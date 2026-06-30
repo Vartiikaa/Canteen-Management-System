@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports — CanteenHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-logo">🍽️</span>
+            <span>CanteenHub</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">        Home</a></li>
+            <li><a href="/menu">    Menu</a></li>
+            <li><a href="/order">   Order</a></li>
+            <li><a href="/cart">    Cart</a></li>
+            <li><a href="/bill">    Bill</a></li>
+            <li><a href="/reports" class="active">Reports</a></li>
+        </ul>
+    </nav>
+
+    <!-- ========== REPORTS SECTION ========== -->
+    <section class="page-section">
+        <h1 class="page-title">📊 Sales Reports</h1>
+
+        <!-- Stats Cards -->
+        <div class="report-cards">
+            <div class="report-card blue">
+                <div class="report-icon">📦</div>
+                <div class="report-value">{{ total_orders }}</div>
+                <div class="report-label">Total Orders</div>
+            </div>
+            <div class="report-card green">
+                <div class="report-icon">💰</div>
+                <div class="report-value">₹{{ "%.2f"|format(total_revenue) }}</div>
+                <div class="report-label">Total Revenue</div>
+            </div>
+            <div class="report-card orange">
+                <div class="report-icon">⭐</div>
+                <div class="report-value">
+                    {% if most_ordered %}
+                        {{ most_ordered.item_name }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+                <div class="report-label">
+                    Most Ordered
+                    {% if most_ordered %}
+                        ({{ most_ordered.total_qty }}×)
+                    {% endif %}
+                </div>
+            </div>
+            <div class="report-card red">
+                <div class="report-icon">📉</div>
+                <div class="report-value">
+                    {% if least_ordered %}
+                        {{ least_ordered.item_name }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+                <div class="report-label">
+                    Least Ordered
+                    {% if least_ordered %}
+                        ({{ least_ordered.total_qty }}×)
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders Table -->
+        <h2 class="section-subtitle">📝 Recent Orders</h2>
+
+        {% if recent_orders %}
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                        <td>#{{ order.order_id }}</td>
+                        <td>{{ order.customer_name }}</td>
+                        <td>{{ order.item_name }}</td>
+                        <td>{{ order.quantity }}</td>
+                        <td>₹{{ "%.2f"|format(order.total_price) }}</td>
+                        <td>{{ order.order_date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <p>No orders placed yet.</p>
+        </div>
+        {% endif %}
+
+        <div class="section-action">
+            <a href="/order" class="btn btn-primary">🛒 Place Order</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 CanteenHub | B.Tech Mini Project</p>
+    </footer>
+</body>
+</html>

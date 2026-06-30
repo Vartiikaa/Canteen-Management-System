@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart — CanteenHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-logo">🍽️</span>
+            <span>CanteenHub</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">        Home</a></li>
+            <li><a href="/menu">    Menu</a></li>
+            <li><a href="/order">   Order</a></li>
+            <li><a href="/cart"    class="active">Cart</a></li>
+            <li><a href="/bill">    Bill</a></li>
+            <li><a href="/reports"> Reports</a></li>
+        </ul>
+    </nav>
+
+    <!-- ========== FLASH MESSAGES ========== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- ========== CART TABLE ========== -->
+    <section class="page-section">
+        <h1 class="page-title">🛍️ Your Cart</h1>
+
+        {% if cart_items %}
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item.item_name }}</td>
+                        <td>₹{{ "%.2f"|format(item.price) }}</td>
+                        <td>
+                            <!-- Inline quantity update -->
+                            <form method="POST" action="/cart/update/{{ item.cart_id }}" class="qty-form">
+                                <input type="number" name="quantity" value="{{ item.quantity }}"
+                                       min="1" max="20" class="qty-input">
+                                <button type="submit" class="btn btn-sm btn-secondary">Update</button>
+                            </form>
+                        </td>
+                        <td><strong>₹{{ "%.2f"|format(item.total) }}</strong></td>
+                        <td>
+                            <a href="/cart/remove/{{ item.cart_id }}"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('Remove this item?')">
+                                ❌ Remove
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary">
+            <div class="summary-row total-row">
+                <span>🛒 Subtotal:</span>
+                <span>₹{{ "%.2f"|format(total_amount) }}</span>
+            </div>
+        </div>
+
+        <div class="section-actions">
+            <a href="/order" class="btn btn-secondary">➕ Add More Items</a>
+            <a href="/bill"  class="btn btn-primary">🧾 Generate Bill</a>
+        </div>
+
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🛒</div>
+            <h2>Your cart is empty!</h2>
+            <p>Browse the menu and add some delicious items.</p>
+            <a href="/menu" class="btn btn-primary">📋 Browse Menu</a>
+        </div>
+        {% endif %}
+    </section>
+
+    <footer>
+        <p>&copy; 2024 CanteenHub | B.Tech Mini Project</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu — CanteenHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-logo">🍽️</span>
+            <span>CanteenHub</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">        Home</a></li>
+            <li><a href="/menu"    class="active">Menu</a></li>
+            <li><a href="/order">   Order</a></li>
+            <li><a href="/cart">    Cart</a></li>
+            <li><a href="/bill">    Bill</a></li>
+            <li><a href="/reports"> Reports</a></li>
+        </ul>
+    </nav>
+
+    <!-- ========== FLASH MESSAGES ========== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- ========== MENU SECTION ========== -->
+    <section class="page-section">
+        <h1 class="page-title">📋 Our Menu</h1>
+
+        {% if grouped %}
+            {% for category, items in grouped.items() %}
+            <div class="menu-category">
+                <h2 class="category-heading">
+                    {% if category == "Snacks" %}🍟
+                    {% elif category == "Drinks" %}🥤
+                    {% elif category == "Meals" %}🍛
+                    {% endif %}
+                    {{ category }}
+                </h2>
+                <div class="menu-grid">
+                    {% for item in items %}
+                    <div class="menu-card">
+                        <div class="menu-card-icon">
+                            {% if category == "Snacks" %}🍟
+                            {% elif category == "Drinks" %}🥤
+                            {% else %}🍛
+                            {% endif %}
+                        </div>
+                        <h3>{{ item.item_name }}</h3>
+                        <p class="menu-price">₹{{ "%.2f"|format(item.price) }}</p>
+                        <span class="menu-badge">{{ item.item_id }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty-msg">No menu items available yet.</p>
+        {% endif %}
+
+        <div class="section-action">
+            <a href="/order" class="btn btn-primary">🛒 Go to Order</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 CanteenHub | B.Tech Mini Project</p>
+    </footer>
+</body>
+</html>

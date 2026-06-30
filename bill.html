@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill — CanteenHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-logo">🍽️</span>
+            <span>CanteenHub</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">        Home</a></li>
+            <li><a href="/menu">    Menu</a></li>
+            <li><a href="/order">   Order</a></li>
+            <li><a href="/cart">    Cart</a></li>
+            <li><a href="/bill"    class="active">Bill</a></li>
+            <li><a href="/reports"> Reports</a></li>
+        </ul>
+    </nav>
+
+    <!-- ========== FLASH MESSAGES ========== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- ========== BILL SECTION ========== -->
+    <section class="page-section">
+
+        {% if confirmed %}
+            <!-- ===== CONFIRMED BILL ===== -->
+            <div class="bill-card confirmed">
+                <div class="bill-header">
+                    <h1>✅ Order Confirmed!</h1>
+                    <p>Thank you, <strong>{{ bill.customer_name }}</strong>!</p>
+                </div>
+
+                <table class="data-table bill-table">
+                    <thead>
+                        <tr><th>Item</th><th>Qty</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for item in bill.item_list %}
+                        <tr>
+                            <td>{{ item.item_name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹{{ "%.2f"|format(item.total) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="bill-summary">
+                    <div class="summary-row"><span>Subtotal</span> <span>₹{{ "%.2f"|format(bill.subtotal) }}</span></div>
+                    <div class="summary-row"><span>Tax ({{ "%.0f"|format(bill.tax_rate) }}%)</span> <span>₹{{ "%.2f"|format(bill.tax_amount) }}</span></div>
+                    <div class="summary-row grand"><span>Grand Total</span> <span>₹{{ "%.2f"|format(bill.grand_total) }}</span></div>
+                </div>
+
+                <div class="section-actions">
+                    <a href="/order" class="btn btn-primary">🛒 New Order</a>
+                    <a href="/" class="btn btn-outline">🏠 Home</a>
+                </div>
+            </div>
+
+        {% else %}
+            <!-- ===== BILL PREVIEW ===== -->
+            <h1 class="page-title">🧾 Bill Preview</h1>
+
+            <div class="bill-card">
+                <div class="bill-header">
+                    <p>Please confirm your order.</p>
+                </div>
+
+                <table class="data-table bill-table">
+                    <thead>
+                        <tr><th>Item</th><th>Qty</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for item in bill.item_list %}
+                        <tr>
+                            <td>{{ item.item_name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹{{ "%.2f"|format(item.total) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="bill-summary">
+                    <div class="summary-row"><span>Subtotal</span> <span>₹{{ "%.2f"|format(bill.subtotal) }}</span></div>
+                    <div class="summary-row"><span>Tax ({{ "%.0f"|format(bill.tax_rate) }}%)</span> <span>₹{{ "%.2f"|format(bill.tax_amount) }}</span></div>
+                    <div class="summary-row grand"><span>Grand Total</span> <span>₹{{ "%.2f"|format(bill.grand_total) }}</span></div>
+                </div>
+
+                <!-- Confirm form -->
+                <div class="form-container">
+                    <form method="POST" action="/bill">
+                        <div class="form-group">
+                            <label for="customer_name">Your Name</label>
+                            <input type="text" id="customer_name" name="customer_name"
+                                   placeholder="Enter name to confirm" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-full">
+                            ✅ Confirm Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+    </section>
+
+    <footer>
+        <p>&copy; 2024 CanteenHub | B.Tech Mini Project</p>
+    </footer>
+</body>
+</html>

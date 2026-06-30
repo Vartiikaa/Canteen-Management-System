@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canteen Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- ========== NAVIGATION BAR ========== -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-logo">🍽️</span>
+            <span>CanteenHub</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/"       class="active">Home</a></li>
+            <li><a href="/menu">   Menu</a></li>
+            <li><a href="/order">  Order</a></li>
+            <li><a href="/cart">   Cart</a></li>
+            <li><a href="/bill">   Bill</a></li>
+            <li><a href="/reports">Reports</a></li>
+        </ul>
+    </nav>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section class="hero">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Welcome to <span class="highlight">CanteenHub</span></h1>
+                <p>
+                    Your one-stop campus canteen management solution.
+                    Browse the menu, place orders, and enjoy delicious food —
+                    all in a few clicks!
+                </p>
+                <div class="hero-buttons">
+                    <a href="/menu"  class="btn btn-primary">📋 View Menu</a>
+                    <a href="/order" class="btn btn-secondary">🛒 Place Order</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FEATURES SECTION ========== -->
+    <section class="features">
+        <h2>How It Works</h2>
+        <div class="feature-grid">
+
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3>Browse Menu</h3>
+                <p>Explore snacks, drinks, and meals with prices clearly listed.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🛒</div>
+                <h3>Add to Cart</h3>
+                <p>Select your favourite items and specify quantities easily.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🧾</div>
+                <h3>Generate Bill</h3>
+                <p>Automatic bill calculation with tax included. Download-ready!</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>View Reports</h3>
+                <p>Track total orders, revenue, and popular items at a glance.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <p>&copy; 2024 CanteenHub | B.Tech Mini Project | Built with Python + Flask</p>
+    </footer>
+
+</body>
+</html>
