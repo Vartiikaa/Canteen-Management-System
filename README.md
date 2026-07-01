@@ -122,6 +122,3 @@ Go to **http://localhost:5000**
 
 ---
 
-## License
-
-This project is created for educational purposes as a B.Tech mini project.
