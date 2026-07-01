@@ -120,5 +120,5 @@ Go to **http://localhost:5000**
 | quantity  | INTEGER |
 | total     | REAL    |
 
----
+
 
